@@ -13,13 +13,19 @@ export async function getAllArticles() {
     }
 }
 
-export async function searchArticles(brands) {
+export async function searchArticles(brands, gender, tags) {
     try {
         if(brands.length === 0) {
             brands = [/./];
         }
+        if(gender === 'todos') {
+            gender = /./
+        }
+        if(tags.length === 0) {
+            tags = [/./];
+        }
         const collection = await app.logIn(credentials);
-        const response = await collection.callFunction('searchArticles', brands);
+        const response = await collection.callFunction('searchArticles', brands, gender, tags);
         return response;
     } catch(err) {
         console.log(err);
