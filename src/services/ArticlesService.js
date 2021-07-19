@@ -12,3 +12,16 @@ export async function getAllArticles() {
         console.log(err);
     }
 }
+
+export async function searchArticles(brands) {
+    try {
+        if(brands.length === 0) {
+            brands = [/./];
+        }
+        const collection = await app.logIn(credentials);
+        const response = await collection.callFunction('searchArticles', brands);
+        return response;
+    } catch(err) {
+        console.log(err);
+    }
+}

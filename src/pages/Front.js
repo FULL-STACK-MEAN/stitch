@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
-import { getAllArticles } from '../services/ArticlesService';
+import { getAllArticles, searchArticles } from '../services/ArticlesService';
 
 export default class Front extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            articles: []
+            articles: [],
+            brands: [],
+            searchBrands: []
         }
     }
 
     componentDidMount() {
         getAllArticles()
             .then(res => {
+                const brands = res.map( elem => {
+                    return elem.brand;
+                })
+                const uniqueBrands = this.getUniqueValues(brands);
+                console.log(uniqueBrands);
                 this.setState({
-                    articles: res
+                    articles: res,
+                    brands: uniqueBrands
                 })
             })
+    }
+
+    getUniqueValues = (values) => {
+        const uniqueValues = values.reduce((uniques, item) => {
+            return uniques.includes(item) ? uniques : [...uniques, item]
+        }, [])
+        return uniqueValues;
     }
 
     articlesCards = () => {
@@ -42,11 +57,42 @@ export default class Front extends Component {
         return cards;
     }
 
+    brandsForm = () => {
+        const brandsCheckbox = this.state.brands.map((brand, index) => {
+            return  <label key={index}>
+                        <input type="checkbox" id={brand} onChange={this.onChangeBrands} />
+                        {brand}
+                    </label>
+        })
+        return brandsCheckbox;
+    }
+
+    onChangeBrands = (event) => {
+        let newArray;
+        if(this.state.searchBrands.includes(event.target.id)) {
+            newArray = this.state.searchBrands.filter(elem => elem !== event.target.id);
+        } else {
+            newArray = [...this.state.searchBrands, event.target.id];
+        }
+        this.setState({
+            searchBrands: newArray
+        }, this.getSearchArticles)
+    }
+
+    getSearchArticles = () => {
+        searchArticles(this.state.searchBrands)
+            .then(res => {
+                this.setState({
+                    articles: res
+                })
+            });
+    }
+
     render() {
         return (
             <div className="container">
                 <aside>
-                    
+                    {this.brandsForm()}
                 </aside>
                 <div className="row grid">
                     {this.articlesCards()}
