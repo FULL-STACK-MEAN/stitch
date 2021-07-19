@@ -1,24 +1,13 @@
 .container {
-    max-width: $pc-size;
-    margin: 0 auto;
-    opacity: 0;
-    transition: 600ms opacity linear;
-
-    &.show {
-        opacity: 1;
-    }
+    @include flex(row, center, center);
 }
 
 .row {
     display: flex;
     padding: 1rem;
-
-    @media (max-width: $tablet-size) {
-        & {
-            flex-direction: column;
-            padding: 1rem 0.5rem;
-        }
-    }
+    width: calc(100% - 360px);
+    height: 100vh;
+    overflow-y: auto;
 
     &.grid {
         display: grid;

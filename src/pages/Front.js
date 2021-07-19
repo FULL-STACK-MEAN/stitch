@@ -34,6 +34,9 @@ export default class Front extends Component {
                                 <span>{article.currentPrice} €</span>
                             </p>
                         </div>
+                        <div className="footer-card">
+                            <button>+ Info</button>
+                        </div>
                     </div>
         })
         return cards;
@@ -41,8 +44,13 @@ export default class Front extends Component {
 
     render() {
         return (
-            <div className="row grid">
-                {this.articlesCards()}
+            <div className="container">
+                <aside>
+                    
+                </aside>
+                <div className="row grid">
+                    {this.articlesCards()}
+                </div>
             </div>
         )
     }
